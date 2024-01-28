@@ -5,7 +5,7 @@ import {
   Container,
   Typography,
 } from "@mui/material";
-import { clientId, redirectUri } from "./constants/Spotify";
+import { clientId, redirectUri } from "./constants/spotify";
 import image from "/Chuchu.jpeg";
 
 function Login() {

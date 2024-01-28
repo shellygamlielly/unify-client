@@ -1,8 +1,8 @@
 import { Avatar, Button, Paper, Typography } from "@mui/material";
-import { UserProfile } from "./constants/Spotify";
+import { SpotifyUserProfile } from "./constants/spotify";
 
 interface WelcomeProps {
-  profile: UserProfile;
+  profile: SpotifyUserProfile;
 }
 
 function Welcome({ profile }: WelcomeProps) {
@@ -33,7 +33,7 @@ function Welcome({ profile }: WelcomeProps) {
           color: "#fff", // Text color
         }}
       >
-        Create Account
+        Sign Up
       </Button>
     </>
   );
