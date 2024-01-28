@@ -3,7 +3,7 @@ import { SPOTIFY_LOGIN } from "./routes";
 export const redirectUri = `http://localhost:5173/${SPOTIFY_LOGIN}`;
 export const clientId = import.meta.env.VITE_SPOTIFY_CLIENT_ID || "";
 
-export interface UserProfile {
+export interface SpotifyUserProfile {
   country: string;
   display_name: string;
   email: string;

@@ -1,9 +1,16 @@
 import { useEffect, useState } from "react";
-import { UserProfile, clientId, redirectUri } from "./constants/Spotify";
+import { SpotifyUserProfile, clientId, redirectUri } from "./constants/spotify";
 import Welcome from "./Welcome";
+import { TunintyProfile } from "./constants/tunity-profile";
+import { CircularProgress } from "@mui/material";
 
 function SpotifyLoginSuccess() {
-  const [profile, setProfile] = useState<UserProfile | null>(null);
+  const [spotifypProfile, setSpotifyProfile] =
+    useState<SpotifyUserProfile | null>(null);
+  const [tunityProfile, setTunityProfile] = useState<TunintyProfile | null>(
+    null,
+  );
+  const [done, setDone] = useState<boolean>(false);
 
   useEffect(() => {
     async function startFetching() {
@@ -13,7 +20,10 @@ function SpotifyLoginSuccess() {
         const accessToken = await getAccessToken(clientId, code);
         const result = await fetchProfile(accessToken);
         if (!result.error) {
-          setProfile(result);
+          setSpotifyProfile(result);
+          // todo: use access token instead of user id
+          setTunityProfile(await getUser(result.id));
+          setDone(true);
         }
       } else {
         //todo: show user the error
@@ -23,10 +33,16 @@ function SpotifyLoginSuccess() {
     startFetching();
   }, []);
 
-  if (!profile) {
-    return <>Loading...</>;
+  if (!done) {
+    return <CircularProgress />;
   }
-  return <Welcome profile={profile} />;
+  if(!spotifypProfile){
+    return <>Login to spotify failed - please try again</>;
+  }
+  if (!tunityProfile) {
+    return <Welcome profile={spotifypProfile} />;
+  }
+  return <>Welcome back</>;
 }
 
 async function getAccessToken(clientId: string, code: string): Promise<string> {
@@ -59,6 +75,25 @@ async function fetchProfile(token: string): Promise<any> {
   const json = await result.json();
   console.log(json);
   return json;
+}
+
+async function getUser(spotifyId: string) {
+  try {
+    const user = await fetch(
+      `http://localhost:3000/user/spotify/${spotifyId}`,
+      {
+        method: "GET",
+      },
+    );
+    if (user.ok) {
+      return await user.json();
+    }
+  } catch (e) {
+    return null;
+  }
+  return null;
+
+  // const userId = await user.text();
 }
 
 export default SpotifyLoginSuccess;
