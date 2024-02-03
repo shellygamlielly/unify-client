@@ -3,6 +3,8 @@ import { SpotifyUserProfile, clientId, redirectUri } from "./constants/spotify";
 import Welcome from "./Welcome";
 import { TunintyProfile } from "./constants/tunity-profile";
 import { CircularProgress } from "@mui/material";
+import Playlists from "./playlists";
+import axios from "axios";
 
 function SpotifyLoginSuccess() {
   const [spotifypProfile, setSpotifyProfile] =
@@ -22,7 +24,10 @@ function SpotifyLoginSuccess() {
         if (!result.error) {
           setSpotifyProfile(result);
           // todo: use access token instead of user id
-          setTunityProfile(await getUser(result.id));
+          const user = await getUser(result.id);
+          if (user) {
+            setTunityProfile(user);
+          }
           setDone(true);
         }
       } else {
@@ -36,13 +41,13 @@ function SpotifyLoginSuccess() {
   if (!done) {
     return <CircularProgress />;
   }
-  if(!spotifypProfile){
+  if (!spotifypProfile) {
     return <>Login to spotify failed - please try again</>;
   }
   if (!tunityProfile) {
     return <Welcome profile={spotifypProfile} />;
   }
-  return <>Welcome back</>;
+  return <Playlists spotifyId={spotifypProfile.id} />;
 }
 
 async function getAccessToken(clientId: string, code: string): Promise<string> {
@@ -79,21 +84,11 @@ async function fetchProfile(token: string): Promise<any> {
 
 async function getUser(spotifyId: string) {
   try {
-    const user = await fetch(
-      `http://localhost:3000/user/spotify/${spotifyId}`,
-      {
-        method: "GET",
-      },
-    );
-    if (user.ok) {
-      return await user.json();
-    }
+    return (await axios.get(`http://localhost:3000/user/spotify/${spotifyId}`))
+      .data;
   } catch (e) {
     return null;
   }
-  return null;
-
-  // const userId = await user.text();
 }
 
 export default SpotifyLoginSuccess;

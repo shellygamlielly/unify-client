@@ -1,11 +1,33 @@
 import { Avatar, Button, Paper, Typography } from "@mui/material";
 import { SpotifyUserProfile } from "./constants/spotify";
+import axios from "axios";
+import { useUserId } from "./user-id-context";
+import { useNavigate } from "react-router-dom";
 
 interface WelcomeProps {
   profile: SpotifyUserProfile;
 }
 
 function Welcome({ profile }: WelcomeProps) {
+  const context = useUserId();
+  const navigate = useNavigate();
+
+  const createUser = async () => {
+    try {
+      const response = await axios.post(`http://localhost:3000/user/`, {
+        spotifyId: profile.id,
+        email: profile.email,
+      });
+
+      const userId = response.data;
+
+      context.setUserId(userId);
+      navigate("/playlist");
+    } catch (error) {
+      console.error(error);
+    }
+  };
+
   return (
     <>
       <Paper
@@ -32,6 +54,7 @@ function Welcome({ profile }: WelcomeProps) {
           backgroundColor: "##add8e6", // Vibrant color
           color: "#fff", // Text color
         }}
+        onClick={() => createUser()}
       >
         Sign Up
       </Button>
