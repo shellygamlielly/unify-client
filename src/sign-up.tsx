@@ -1,28 +1,23 @@
 import { Avatar, Button, Paper, Typography } from "@mui/material";
-import { SpotifyUserProfile } from "./constants/spotify";
 import axios from "axios";
-import { useUserId } from "./user-id-context";
 import { useNavigate } from "react-router-dom";
+import { useUser } from "./user-context";
 
-interface WelcomeProps {
-  profile: SpotifyUserProfile;
-}
-
-function Welcome({ profile }: WelcomeProps) {
-  const context = useUserId();
+function Welcome() {
+  const userContext = useUser();
   const navigate = useNavigate();
 
   const createUser = async () => {
     try {
       const response = await axios.post(`http://localhost:3000/user/`, {
-        spotifyId: profile.id,
-        email: profile.email,
+        spotifyId: userContext.user.spotifyId,
+        email: userContext.user.email,
       });
 
       const userId = response.data;
 
-      context.setUserId(userId);
-      navigate("/playlist");
+      userContext.setUserId(userId);
+      navigate("/home");
     } catch (error) {
       console.error(error);
     }
@@ -40,11 +35,13 @@ function Welcome({ profile }: WelcomeProps) {
         }}
       >
         <Avatar
-          alt={profile.display_name}
-          src={profile.images[1]?.url}
+          alt={userContext.user.displayName || ""}
+          src={userContext?.user?.profileImage || ""}
           style={{ width: "250px", height: "250px", margin: "auto" }}
         />
-        <Typography variant="h5">Welcome, {profile.display_name}!</Typography>
+        <Typography variant="h5">
+          Welcome, {userContext?.user?.displayName}!
+        </Typography>
       </Paper>
       <Button
         variant="contained"

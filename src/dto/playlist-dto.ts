@@ -1,4 +1,4 @@
-export interface Playlist {
+export interface PlaylistDto {
   ownerId: string;
   name: string;
   playlistId: string;

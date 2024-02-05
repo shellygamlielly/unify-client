@@ -1,32 +1,49 @@
 import { useEffect, useState } from "react";
 import { SpotifyUserProfile, clientId, redirectUri } from "./constants/spotify";
-import Welcome from "./Welcome";
-import { TunintyProfile } from "./constants/tunity-profile";
 import { CircularProgress } from "@mui/material";
-import Playlists from "./playlists";
 import axios from "axios";
+import { useNavigate } from "react-router-dom";
+import { UserDto } from "./dto/user-dto";
+import { IUser } from "./@types/user";
+import { useUser } from "./user-context";
 
 function SpotifyLoginSuccess() {
   const [spotifypProfile, setSpotifyProfile] =
     useState<SpotifyUserProfile | null>(null);
-  const [tunityProfile, setTunityProfile] = useState<TunintyProfile | null>(
-    null,
-  );
   const [done, setDone] = useState<boolean>(false);
+  const userContext = useUser();
 
+  const navigate = useNavigate();
   useEffect(() => {
     async function startFetching() {
       const params = new URLSearchParams(window.location.search);
       const code = params.get("code");
+
       if (code) {
         const accessToken = await getAccessToken(clientId, code);
         const result = await fetchProfile(accessToken);
         if (!result.error) {
           setSpotifyProfile(result);
+          const userFromApi: IUser = {
+            spotifyId: result?.id,
+            email: result?.email,
+            profileImage: result?.images?.[1]?.url,
+            displayName: result?.display_name,
+          };
+
+          userContext.setUser(userFromApi);
+
           // todo: use access token instead of user id
-          const user = await getUser(result.id);
-          if (user) {
-            setTunityProfile(user);
+          try {
+            const user = (
+              await axios.get(`http://localhost:3000/user/spotify/${result.id}`)
+            ).data as UserDto;
+            userContext.setUserId(user.userId);
+            navigate("/home");
+          } catch (error) {
+            navigate("/sign-up", {
+              state: { spotifyProfile: spotifypProfile },
+            });
           }
           setDone(true);
         }
@@ -44,10 +61,6 @@ function SpotifyLoginSuccess() {
   if (!spotifypProfile) {
     return <>Login to spotify failed - please try again</>;
   }
-  if (!tunityProfile) {
-    return <Welcome profile={spotifypProfile} />;
-  }
-  return <Playlists spotifyId={spotifypProfile.id} />;
 }
 
 async function getAccessToken(clientId: string, code: string): Promise<string> {
@@ -80,15 +93,6 @@ async function fetchProfile(token: string): Promise<any> {
   const json = await result.json();
   console.log(json);
   return json;
-}
-
-async function getUser(spotifyId: string) {
-  try {
-    return (await axios.get(`http://localhost:3000/user/spotify/${spotifyId}`))
-      .data;
-  } catch (e) {
-    return null;
-  }
 }
 
 export default SpotifyLoginSuccess;
