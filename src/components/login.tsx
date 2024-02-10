@@ -1,26 +1,16 @@
-import {
-  Button,
-  Card,
-  CardContent,
-  Container,
-  Typography,
-} from "@mui/material";
 import { clientId, redirectUri } from "../constants/spotify";
 import image from "/Chuchu.jpeg";
 import {
   StyledButton,
   StyledCard,
   StyledCardContent,
+  StyledContainer,
   StyledTypography,
 } from "./styles/components-styles";
 
 function Login() {
   return (
-    <Container
-      component="main"
-      maxWidth="xs"
-      style={{ textAlign: "center", marginTop: "50px" }}
-    >
+    <StyledContainer>
       <img src={image} style={{ width: "400px", height: "300px" }} alt="logo" />
       <StyledCard variant="outlined" style={{ marginTop: "20px" }}>
         <StyledCardContent>
@@ -36,7 +26,7 @@ function Login() {
           </StyledButton>
         </StyledCardContent>
       </StyledCard>
-    </Container>
+    </StyledContainer>
   );
 }
 

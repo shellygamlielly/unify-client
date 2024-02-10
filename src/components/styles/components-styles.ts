@@ -7,16 +7,36 @@ import {
   Button,
   styled,
   IconButton,
+  Container,
 } from "@mui/material";
+
+const StyledContainer = styled(Container)(({ theme }) => ({
+  minHeight: "100vh",
+  alignItems: "center",
+  justifyContent: "center",
+  background: `linear-gradient(to right, ${theme.palette.primary.main}, ${theme.palette.secondary.main})`,
+  color: theme.palette.primary.contrastText,
+  padding: theme.spacing(4),
+  textAlign: "center",
+}));
 
 const StyledCard = styled(Card)(({ theme }) => ({
   margin: "auto",
   padding: theme.spacing(3),
   textAlign: "center",
-  background: `linear-gradient(to right, ${theme.palette.primary.main}, ${theme.palette.secondary.main})`,
+  background: `linear-gradient(to right, ${theme.palette.primary.light}, ${theme.palette.secondary.dark})`,
   color: theme.palette.primary.contrastText,
-  boxShadow: theme.shadows[8],
+  boxShadow: theme.shadows[2],
   display: "flex",
+  borderRadius: theme.spacing(5),
+}));
+
+const StyledCardContent = styled(CardContent)(({ theme }) => ({
+  flex: "1",
+  display: "flex",
+  flexDirection: "column",
+  justifyContent: "space-between",
+  padding: theme.spacing(2),
 }));
 
 const StyledTypography = styled(Typography)(({ theme }) => ({
@@ -24,14 +44,6 @@ const StyledTypography = styled(Typography)(({ theme }) => ({
   fontFamily: "'Poppins', sans-serif", // Use a suitable font, you can replace 'Poppins' with your desired font
   letterSpacing: "0.5px", // Add slight letter spacing for improved readability
   lineHeight: 1.2, // Adjust line height for better text flow
-  // color: theme.palette.primary.contrastText,
-  // "&.subtitle1": {
-  //   color: theme.palette.text.primary, // Set color for subtitle1
-  // },
-
-  // "&.subtitle2": {
-  //   color: theme.palette.text.primary, // Set color for subtitle2
-  // },
 }));
 
 const StyledList = styled(List)(({ theme }) => ({
@@ -42,6 +54,8 @@ const StyledList = styled(List)(({ theme }) => ({
 }));
 
 const StyledListItem = styled(ListItem)(({ theme }) => ({
+  minHeight: "10vh",
+
   width: "200px",
   margin: theme.spacing(2),
   textAlign: "center",
@@ -53,19 +67,12 @@ const StyledListItem = styled(ListItem)(({ theme }) => ({
   borderRadius: "5%",
   color: theme.palette.text.primary,
 }));
+
 const StyledImage = styled("img")(({ theme }) => ({
   width: "100%",
   height: "150px",
   objectFit: "cover",
   borderRadius: "5%",
-}));
-
-const StyledCardContent = styled(CardContent)(({ theme }) => ({
-  flex: "1",
-  display: "flex",
-  flexDirection: "column",
-  justifyContent: "space-between",
-  padding: theme.spacing(2),
 }));
 
 const StyledButton = styled(Button)(({ theme }) => ({
@@ -104,6 +111,7 @@ const AddGroupIconButton = styled(StyledIconButton)(({ theme }) => ({
 }));
 
 export {
+  StyledContainer,
   StyledCard,
   StyledTypography,
   StyledList,

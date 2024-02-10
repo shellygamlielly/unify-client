@@ -2,7 +2,6 @@ import axios from "axios";
 import { useContext, useEffect, useState } from "react";
 import { CreatePlaylistDto } from "../dto/create-playlist-dto";
 import { UserContext } from "../user-context";
-import { CardContent } from "@mui/material";
 import AddIcon from "@mui/icons-material/Add";
 import DeleteIcon from "@mui/icons-material/Delete";
 
@@ -11,17 +10,22 @@ import {
   StyledButton,
   AddGroupIconButton,
   DeleteIconButton,
-  StyledCard,
   StyledCardContent,
   StyledImage,
   StyledList,
   StyledListItem,
   StyledTypography,
+  StyledContainer,
 } from "./styles/components-styles";
 import { useNavigate } from "react-router-dom";
+import DeleteDialog from "./delet-dialog";
 
 function Home() {
   const [playlists, setPlaylists] = useState<CreatePlaylistDto[]>([]);
+
+  const [isDialogOpen, setDialogOpen] = useState(false);
+  const [itemToDelete, setItemToDelete] = useState<string>("");
+
   const context = useContext(UserContext);
   const navigate = useNavigate();
 
@@ -49,6 +53,28 @@ function Home() {
     }
   };
 
+  const handleConfirmDelete = async () => {
+    try {
+      await axios.delete(
+        `${import.meta.env.VITE_TUNITY_SERVER_BASE_URL}/playlist/playlistId/${itemToDelete}`,
+      );
+      console.log("Playlist deleted:", itemToDelete);
+      setDialogOpen(false);
+      await fetchPlaylists();
+    } catch (e) {
+      console.error("Error removing playlist:", e);
+    }
+  };
+
+  const handleCancelDelete = () => {
+    setDialogOpen(false);
+  };
+
+  const handleDeletePlaylist = (playlistId: string) => {
+    setDialogOpen(true);
+    setItemToDelete(playlistId);
+  };
+
   const handleDisplayPlaylistInfo = (playlistId: string) => {
     navigate(`/playlist/${playlistId}`);
   };
@@ -71,47 +97,52 @@ function Home() {
   }
 
   return (
-    <StyledCard>
-      <CardContent>
-        <StyledTypography variant="h3" fontWeight="700">
-          TUnity
-        </StyledTypography>
+    <StyledContainer>
+      <StyledTypography variant="h3" fontWeight="700">
+        TUnity
+      </StyledTypography>
 
-        <StyledTypography variant="subtitle1" fontWeight="700">
-          Discover. Collaborate. Create.
-        </StyledTypography>
-        <StyledButton onClick={handleCreatePlaylist}>
-          <i className="fas fa-plus-circle"></i>
-          <AddIcon /> New Playlist
-        </StyledButton>
-        <StyledList>
-          {playlists.map((playlist) => (
-            <StyledListItem key={playlist.playlistId}>
-              <StyledImage
-                src={`https://source.unsplash.com/300x200/?${playlist.name}`} // Using Unsplash for demo images
-                alt={playlist.name}
-              />
-              <StyledCardContent
-                onClick={() => handleDisplayPlaylistInfo(playlist.playlistId)}
+      <StyledTypography variant="subtitle1" fontWeight="700">
+        Discover. Collaborate. Create.
+      </StyledTypography>
+      <StyledButton onClick={handleCreatePlaylist}>
+        <i className="fas fa-plus-circle"></i>
+        <AddIcon /> New Playlist
+      </StyledButton>
+      <StyledList>
+        {playlists.map((playlist) => (
+          <StyledListItem key={playlist.playlistId}>
+            <StyledImage
+              src={`https://source.unsplash.com/300x200/?${playlist.name}`} // Using Unsplash for demo images
+              alt={playlist.name}
+              onClick={() => handleDisplayPlaylistInfo(playlist.playlistId)}
+            />
+            <StyledCardContent>
+              <StyledTypography className="h6">
+                {playlist.name}
+              </StyledTypography>
+              <StyledTypography className="body2">
+                {playlist.songsCount} songs
+              </StyledTypography>
+              <AddGroupIconButton>
+                <GroupAddIcon />
+              </AddGroupIconButton>
+              <DeleteIconButton
+                onClick={() => handleDeletePlaylist(playlist.playlistId)}
               >
-                <StyledTypography className="h6">
-                  {playlist.name}
-                </StyledTypography>
-                <StyledTypography className="body2">
-                  {playlist.songsCount} songs
-                </StyledTypography>
-                <AddGroupIconButton>
-                  <GroupAddIcon />
-                </AddGroupIconButton>
-                <DeleteIconButton>
-                  <DeleteIcon />
-                </DeleteIconButton>
-              </StyledCardContent>
-            </StyledListItem>
-          ))}
-        </StyledList>
-      </CardContent>
-    </StyledCard>
+                <DeleteIcon />
+              </DeleteIconButton>
+              <DeleteDialog
+                open={isDialogOpen}
+                onClose={handleCancelDelete}
+                onConfirm={handleConfirmDelete}
+                itemToDeleteId={playlist.playlistId}
+              />
+            </StyledCardContent>
+          </StyledListItem>
+        ))}
+      </StyledList>
+    </StyledContainer>
   );
 }
 

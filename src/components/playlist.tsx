@@ -1,8 +1,9 @@
 import axios from "axios";
 import { useParams } from "react-router-dom";
 import {
-  StyledCard,
+  DeleteIconButton,
   StyledCardContent,
+  StyledContainer,
   StyledImage,
   StyledList,
   StyledListItem,
@@ -12,29 +13,53 @@ import {
 import { useEffect, useState } from "react";
 import { PlaylistDto } from "../dto/playlist-dto";
 import SearchSong from "./search-song";
-import { CardContent, Typography } from "@mui/material";
+import DeleteDialog from "./delet-dialog";
+import DeleteIcon from "@mui/icons-material/Delete";
 
 function Playlist() {
   const [playlist, setplaylist] = useState<PlaylistDto>();
+  const [isDialogOpen, setDialogOpen] = useState(false);
+  const [trackToDeleteSpotifyId, settrackToDeleteSpotifyId] =
+    useState<string>("");
   const { playlistId } = useParams();
-
+  const fetchData = async () => {
+    try {
+      const result = await axios.get(
+        `${import.meta.env.VITE_TUNITY_SERVER_BASE_URL}/playlist/playlistId/${playlistId}`,
+      );
+      setplaylist(result.data);
+    } catch (error) {
+      console.error("Error fetching playlists:", error);
+    }
+  };
   useEffect(() => {
-    const fetchData = async () => {
-      try {
-        const result = await axios.get(
-          `${import.meta.env.VITE_TUNITY_SERVER_BASE_URL}/playlist/playlistId/${playlistId}`,
-        );
-        setplaylist(result.data);
-      } catch (error) {
-        console.error("Error fetching playlists:", error);
-      }
-    };
-
     fetchData();
   });
 
+  const handleConfirmDelete = async () => {
+    try {
+      await axios.delete(
+        `${import.meta.env.VITE_TUNITY_SERVER_BASE_URL}/song/${playlistId}/${trackToDeleteSpotifyId}`,
+      );
+      console.log("Playlist deleted:", trackToDeleteSpotifyId);
+      setDialogOpen(false);
+      await fetchData();
+    } catch (e) {
+      console.error("Error removing playlist:", e);
+    }
+  };
+
+  const handleCancelDelete = () => {
+    setDialogOpen(false);
+  };
+
+  const handleDeleteSong = (spotifyId: string) => {
+    setDialogOpen(true);
+    settrackToDeleteSpotifyId(spotifyId);
+  };
+
   return (
-    <StyledCard>
+    <StyledContainer>
       <StyledCardContent>
         <StyledTypography variant="h2">{playlist?.name}</StyledTypography>
 
@@ -46,11 +71,22 @@ function Playlist() {
               <StyledTypography variant="subtitle1">
                 {song.name}
               </StyledTypography>
+              <DeleteIconButton
+                onClick={() => handleDeleteSong(song.spotifySongId)}
+              >
+                <DeleteIcon />
+              </DeleteIconButton>
+              <DeleteDialog
+                open={isDialogOpen}
+                onClose={handleCancelDelete}
+                onConfirm={handleConfirmDelete}
+                itemToDeleteId={playlist.playlistId}
+              />
             </StyledListItem>
           ))}
         </StyledList>
       </StyledCardContent>
-    </StyledCard>
+    </StyledContainer>
   );
 }
 
