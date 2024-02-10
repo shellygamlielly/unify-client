@@ -1,7 +1,8 @@
+import { SongDto } from "./song-dto";
+
 export interface PlaylistDto {
-  ownerId: string;
   name: string;
   playlistId: string;
   maxTime: number;
-  songsCount: number;
+  songs: SongDto[];
 }

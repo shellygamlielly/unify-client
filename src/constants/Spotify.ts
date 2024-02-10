@@ -21,6 +21,22 @@ export interface SpotifyUserProfile {
   uri: string;
 }
 
+export interface SpotifyTrackInfo {
+  album: {
+    name: string;
+    images: Image[];
+  };
+  name: string;
+  duration_ms: number;
+  artists: {
+    name: string;
+  }[];
+  external_urls: {
+    spotify: string;
+  };
+  id: string;
+}
+
 export interface Image {
   url: string;
   height: number;

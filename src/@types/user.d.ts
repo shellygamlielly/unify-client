@@ -1,5 +1,6 @@
 export interface IUser {
   spotifyId?: string;
+  spotifyAccessToken?: string;
   email?: string;
   profileImage?: string | null;
   displayName?: string | null;

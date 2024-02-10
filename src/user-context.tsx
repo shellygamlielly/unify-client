@@ -3,6 +3,7 @@ import { IUser, UserContextType } from "./@types/user";
 
 const initialUser: IUser = {
   spotifyId: undefined,
+  spotifyAccessToken: undefined,
   email: undefined,
   profileImage: null,
   displayName: null,

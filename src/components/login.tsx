@@ -5,8 +5,14 @@ import {
   Container,
   Typography,
 } from "@mui/material";
-import { clientId, redirectUri } from "./constants/spotify";
+import { clientId, redirectUri } from "../constants/spotify";
 import image from "/Chuchu.jpeg";
+import {
+  StyledButton,
+  StyledCard,
+  StyledCardContent,
+  StyledTypography,
+} from "./styles/components-styles";
 
 function Login() {
   return (
@@ -16,10 +22,10 @@ function Login() {
       style={{ textAlign: "center", marginTop: "50px" }}
     >
       <img src={image} style={{ width: "400px", height: "300px" }} alt="logo" />
-      <Card variant="outlined" style={{ marginTop: "20px" }}>
-        <CardContent>
-          <Typography variant="h5">Get Started</Typography>
-          <Button
+      <StyledCard variant="outlined" style={{ marginTop: "20px" }}>
+        <StyledCardContent>
+          <StyledTypography variant="h5">Get Started</StyledTypography>
+          <StyledButton
             variant="contained"
             color="primary"
             fullWidth
@@ -27,9 +33,9 @@ function Login() {
             onClick={spotifyAuthentication}
           >
             Log in with Spotify
-          </Button>
-        </CardContent>
-      </Card>
+          </StyledButton>
+        </StyledCardContent>
+      </StyledCard>
     </Container>
   );
 }

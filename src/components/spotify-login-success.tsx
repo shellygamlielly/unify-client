@@ -1,11 +1,15 @@
 import { useEffect, useState } from "react";
-import { SpotifyUserProfile, clientId, redirectUri } from "./constants/spotify";
+import {
+  SpotifyUserProfile,
+  clientId,
+  redirectUri,
+} from "../constants/spotify";
 import { CircularProgress } from "@mui/material";
 import axios from "axios";
 import { useNavigate } from "react-router-dom";
-import { UserDto } from "./dto/user-dto";
-import { IUser } from "./@types/user";
-import { useUser } from "./user-context";
+import { UserDto } from "../dto/user-dto";
+import { IUser } from "../@types/user";
+import { useUser } from "../user-context";
 
 function SpotifyLoginSuccess() {
   const [spotifypProfile, setSpotifyProfile] =
@@ -26,6 +30,7 @@ function SpotifyLoginSuccess() {
           setSpotifyProfile(result);
           const userFromApi: IUser = {
             spotifyId: result?.id,
+            spotifyAccessToken: accessToken,
             email: result?.email,
             profileImage: result?.images?.[1]?.url,
             displayName: result?.display_name,
@@ -36,7 +41,7 @@ function SpotifyLoginSuccess() {
           // todo: use access token instead of user id
           try {
             const user = (
-              await axios.get(`http://localhost:3000/user/spotify/${result.id}`)
+              await axios.get(`${import.meta.env.VITE_TUNITY_SERVER_BASE_URL}/user/spotify/${result.id}`)
             ).data as UserDto;
             userContext.setUserId(user.userId);
             navigate("/home");
