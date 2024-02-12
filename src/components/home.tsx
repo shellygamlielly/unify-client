@@ -19,12 +19,16 @@ import {
 } from "./styles/components-styles";
 import { useNavigate } from "react-router-dom";
 import DeleteDialog from "./delet-dialog";
+import InviteDialog from "./invite-colaborators";
 
 function Home() {
   const [playlists, setPlaylists] = useState<CreatePlaylistDto[]>([]);
 
-  const [isDialogOpen, setDialogOpen] = useState(false);
-  const [itemToDelete, setItemToDelete] = useState<string>("");
+  const [isDeleteDialogOpen, setDeleteDialogOpen] = useState(false);
+  const [selectedPlaylistId, setSelectedPlaylistId] = useState<string>("");
+
+  const [isInviteDialogOpen, setInviteDialogOpen] = useState(false);
+  useState<string>("");
 
   const context = useContext(UserContext);
   const navigate = useNavigate();
@@ -56,10 +60,10 @@ function Home() {
   const handleConfirmDelete = async () => {
     try {
       await axios.delete(
-        `${import.meta.env.VITE_TUNITY_SERVER_BASE_URL}/playlist/playlistId/${itemToDelete}`,
+        `${import.meta.env.VITE_TUNITY_SERVER_BASE_URL}/playlist/playlistId/${selectedPlaylistId}`,
       );
-      console.log("Playlist deleted:", itemToDelete);
-      setDialogOpen(false);
+      console.log("Playlist deleted:", selectedPlaylistId);
+      setDeleteDialogOpen(false);
       await fetchPlaylists();
     } catch (e) {
       console.error("Error removing playlist:", e);
@@ -67,12 +71,17 @@ function Home() {
   };
 
   const handleCancelDelete = () => {
-    setDialogOpen(false);
+    setDeleteDialogOpen(false);
   };
 
   const handleDeletePlaylist = (playlistId: string) => {
-    setDialogOpen(true);
-    setItemToDelete(playlistId);
+    setDeleteDialogOpen(true);
+    setSelectedPlaylistId(playlistId);
+  };
+
+  const handleSharePlaylist = (playlistId: string) => {
+    setInviteDialogOpen(true);
+    setSelectedPlaylistId(playlistId);
   };
 
   const handleDisplayPlaylistInfo = (playlistId: string) => {
@@ -124,19 +133,26 @@ function Home() {
               <StyledTypography className="body2">
                 {playlist.songsCount} songs
               </StyledTypography>
-              <AddGroupIconButton>
+              <AddGroupIconButton
+                onClick={() => handleSharePlaylist(playlist.playlistId)}
+              >
                 <GroupAddIcon />
               </AddGroupIconButton>
+              <InviteDialog
+                open={isInviteDialogOpen}
+                onClose={() => setInviteDialogOpen(false)}
+                playlistId={selectedPlaylistId}
+              />
               <DeleteIconButton
                 onClick={() => handleDeletePlaylist(playlist.playlistId)}
               >
                 <DeleteIcon />
               </DeleteIconButton>
               <DeleteDialog
-                open={isDialogOpen}
+                open={isDeleteDialogOpen}
                 onClose={handleCancelDelete}
                 onConfirm={handleConfirmDelete}
-                itemToDeleteId={playlist.playlistId}
+                itemToDeleteId={selectedPlaylistId}
               />
             </StyledCardContent>
           </StyledListItem>

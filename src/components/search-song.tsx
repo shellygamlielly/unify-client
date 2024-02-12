@@ -1,5 +1,6 @@
 import axios from "axios";
 import {
+  FC,
   HTMLAttributes,
   SyntheticEvent,
   useContext,
@@ -15,22 +16,23 @@ import {
   StyledTypography,
 } from "./styles/components-styles";
 import AddIcon from "@mui/icons-material/Add";
-import { useParams } from "react-router-dom";
-import { SpotifyTrackInfo, SpotifyUserProfile } from "../constants/spotify";
+import { SpotifyTrackInfo } from "../constants/spotify";
 import { Autocomplete, TextField } from "@mui/material";
 import { search } from "../search";
-import { ArtTrackSharp } from "@mui/icons-material";
 
-function SearchSong() {
-  const { playlistId } = useParams();
+interface SearchSongProps {
+  onTrackSelected: (track: SpotifyTrackInfo) => void;
+}
 
+const SearchSong: FC<SearchSongProps> = ({
+  onTrackSelected: onTrackSelected,
+}) => {
   const context = useContext(UserContext);
   const accessToken = context.user.spotifyAccessToken;
 
   const [query, setQuery] = useState("");
   console.log(query);
   const [suggestions, setSuggestions] = useState<SpotifyTrackInfo[]>([]);
-  const [selectedTrack, setSelectedTrack] = useState();
 
   const handleSearch = async (query: string) => {
     if (!query?.trim()) {
@@ -54,27 +56,11 @@ function SearchSong() {
     handleSearch(query);
   }, [query]);
 
-  const handleSelectTrack = async (track: SpotifyTrackInfo) => {
-    if (!track) {
-      return;
-    }
-    const response = await axios.post(
-      `${import.meta.env.VITE_TUNITY_SERVER_BASE_URL}/song/`,
-      {
-        spotifySongId: track.id,
-        name: track.name,
-        playlistId,
-        albumCoverUrl: track.album.images[0].url,
-      },
-    );
-    setSelectedTrack(response.data);
-  };
-
   const renderOption = (
     props: HTMLAttributes<HTMLLIElement>,
     track: SpotifyTrackInfo,
   ) => (
-    <StyledCard key={track.name}>
+    <StyledCard key={track.id}>
       <StyledCardContent>
         <StyledImage src={track.album.images[0].url} />
         <StyledTypography variant="subtitle1">{track.name}</StyledTypography>
@@ -84,7 +70,7 @@ function SearchSong() {
         <StyledTypography variant="subtitle2">
           {track.album.name}
         </StyledTypography>
-        <StyledButton onClick={() => handleSelectTrack(track)}>
+        <StyledButton onClick={() => onTrackSelected(track)}>
           <AddIcon />
           Add
         </StyledButton>
@@ -115,6 +101,6 @@ function SearchSong() {
       </StyledCardContent>
     </StyledCard>
   );
-}
+};
 
 export default SearchSong;

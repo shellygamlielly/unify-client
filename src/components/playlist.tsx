@@ -15,6 +15,7 @@ import { PlaylistDto } from "../dto/playlist-dto";
 import SearchSong from "./search-song";
 import DeleteDialog from "./delet-dialog";
 import DeleteIcon from "@mui/icons-material/Delete";
+import { SpotifyTrackInfo } from "../constants/spotify";
 
 function Playlist() {
   const [playlist, setplaylist] = useState<PlaylistDto>();
@@ -34,7 +35,7 @@ function Playlist() {
   };
   useEffect(() => {
     fetchData();
-  });
+  }, []);
 
   const handleConfirmDelete = async () => {
     try {
@@ -58,12 +59,25 @@ function Playlist() {
     settrackToDeleteSpotifyId(spotifyId);
   };
 
+  const addTrack = async (track: SpotifyTrackInfo) => {
+    if (!track) {
+      return;
+    }
+    await axios.post(`${import.meta.env.VITE_TUNITY_SERVER_BASE_URL}/song/`, {
+      spotifySongId: track.id,
+      name: track.name,
+      playlistId,
+      albumCoverUrl: track.album.images[0].url,
+    });
+    fetchData();
+  };
+
   return (
     <StyledContainer>
       <StyledCardContent>
         <StyledTypography variant="h2">{playlist?.name}</StyledTypography>
 
-        <SearchSong></SearchSong>
+        <SearchSong onTrackSelected={addTrack} />
         <StyledList>
           {playlist?.songs.map((song) => (
             <StyledListItem key={song.spotifySongId}>
