@@ -36,7 +36,7 @@ function Home() {
   const fetchPlaylists = async () => {
     try {
       const playlistsData = await axios.get(
-        `${import.meta.env.VITE_TUNITY_SERVER_BASE_URL}/playlist/${context.user.userId}`,
+        `${import.meta.env.VITE_TUNITY_SERVER_BASE_URL}/playlist/ownerId/${context.user.userId}`,
       );
       setPlaylists(playlistsData.data);
     } catch (error) {
@@ -60,7 +60,7 @@ function Home() {
   const handleConfirmDelete = async () => {
     try {
       await axios.delete(
-        `${import.meta.env.VITE_TUNITY_SERVER_BASE_URL}/playlist/playlistId/${selectedPlaylistId}`,
+        `${import.meta.env.VITE_TUNITY_SERVER_BASE_URL}/playlist/${selectedPlaylistId}`,
       );
       console.log("Playlist deleted:", selectedPlaylistId);
       setDeleteDialogOpen(false);

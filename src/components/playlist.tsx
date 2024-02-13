@@ -32,7 +32,7 @@ function Playlist() {
   const fetchData = async () => {
     try {
       const result = await axios.get(
-        `${import.meta.env.VITE_TUNITY_SERVER_BASE_URL}/playlist/playlistId/${playlistId}`,
+        `${import.meta.env.VITE_TUNITY_SERVER_BASE_URL}/playlist/${playlistId}`,
       );
       setplaylist(result.data);
     } catch (error) {
