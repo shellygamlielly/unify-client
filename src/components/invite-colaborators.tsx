@@ -81,18 +81,21 @@ const InviteDialog: React.FC<InviteDialogProps> = ({
           <Button onClick={handleSendInvitation} color="primary">
             Send Invitation
           </Button>
-          <Button onClick={() => setIsCreateLink(true)} color="primary">
-            Create link
-          </Button>
-          <Button onClick={onCancle} color="primary">
-            Cancel
-          </Button>
+          {!isCreateLink && (
+            <>
+              <Button onClick={() => setIsCreateLink(true)} color="primary">
+                Create link
+              </Button>
+
+              <Button onClick={onCancle} color="primary">
+                Cancel
+              </Button>
+            </>
+          )}
         </DialogActions>
         {isCreateLink && (
           <>
-            <DialogContentText style={{ marginTop: "10px" }}>
-              {"Shared Playlist URL:"}
-            </DialogContentText>
+            <DialogContentText>{"Shared Playlist URL:"}</DialogContentText>
             <TextField
               variant="outlined"
               fullWidth
@@ -104,6 +107,11 @@ const InviteDialog: React.FC<InviteDialogProps> = ({
             <Button onClick={handleCopyLink} color="primary">
               Copy Link
             </Button>
+            <DialogActions>
+              <Button onClick={onCancle} color="primary">
+                Cancel
+              </Button>
+            </DialogActions>
           </>
         )}
       </DialogContent>

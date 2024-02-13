@@ -82,20 +82,22 @@ function Playlist() {
           {playlist?.songs.map((song) => (
             <StyledListItem key={song.spotifySongId}>
               <StyledImage src={song.albumCoverUrl} alt={song.name} />
-              <StyledTypography variant="subtitle1">
-                {song.name}
-              </StyledTypography>
-              <DeleteIconButton
-                onClick={() => handleDeleteSong(song.spotifySongId)}
-              >
-                <DeleteIcon />
-              </DeleteIconButton>
-              <DeleteDialog
-                open={isDialogOpen}
-                onClose={handleCancelDelete}
-                onConfirm={handleConfirmDelete}
-                itemToDeleteId={playlist.playlistId}
-              />
+              <StyledCardContent>
+                <StyledTypography variant="subtitle1">
+                  {song.name}
+                </StyledTypography>
+                <DeleteIconButton
+                  onClick={() => handleDeleteSong(song.spotifySongId)}
+                >
+                  <DeleteIcon />
+                </DeleteIconButton>
+                <DeleteDialog
+                  open={isDialogOpen}
+                  onClose={handleCancelDelete}
+                  onConfirm={handleConfirmDelete}
+                  itemToDeleteId={playlist.playlistId}
+                />
+              </StyledCardContent>
             </StyledListItem>
           ))}
         </StyledList>
