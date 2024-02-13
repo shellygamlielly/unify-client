@@ -8,6 +8,7 @@ import {
   styled,
   IconButton,
   Container,
+  IconButtonProps,
 } from "@mui/material";
 
 const StyledContainer = styled(Container)(({ theme }) => ({
@@ -102,13 +103,30 @@ const StyledIconButton = styled(IconButton)(({ theme }) => ({
   },
 }));
 
-const DeleteIconButton = styled(StyledIconButton)(({ theme }) => ({
+const RightIconButton = styled(StyledIconButton)(({ theme }) => ({
   right: theme.spacing(1),
 }));
 
-const AddGroupIconButton = styled(StyledIconButton)(({ theme }) => ({
+const LeftIconButton = styled(StyledIconButton)(({ theme }) => ({
   left: theme.spacing(1),
 }));
+
+interface StyledIconButtonProps extends IconButtonProps {
+  hasvote?: string;
+}
+
+const StyledVoteIconButton = styled(IconButton)<StyledIconButtonProps>(
+  ({ theme, hasvote }) => ({
+    position: "absolute",
+    bottom: theme.spacing(1),
+    color: hasvote == "true" ? "#FFFF00" : "#fff",
+    backgroundColor: theme.palette.primary.dark,
+
+    "&:hover": {
+      backgroundColor: theme.palette.primary.dark,
+    },
+  }),
+);
 
 export {
   StyledContainer,
@@ -119,6 +137,7 @@ export {
   StyledImage,
   StyledCardContent,
   StyledButton,
-  DeleteIconButton,
-  AddGroupIconButton,
+  RightIconButton,
+  LeftIconButton,
+  StyledVoteIconButton,
 };

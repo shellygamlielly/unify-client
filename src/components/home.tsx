@@ -8,8 +8,8 @@ import DeleteIcon from "@mui/icons-material/Delete";
 import GroupAddIcon from "@mui/icons-material/GroupAdd";
 import {
   StyledButton,
-  AddGroupIconButton,
-  DeleteIconButton,
+  LeftIconButton as AddGroupIconButton,
+  RightIconButton as DeleteIconButton,
   StyledCardContent,
   StyledImage,
   StyledList,

@@ -1,7 +1,8 @@
 import axios from "axios";
 import { useParams } from "react-router-dom";
 import {
-  DeleteIconButton,
+  RightIconButton as DeleteIconButton,
+  LeftIconButton as VoteIconButton,
   StyledCardContent,
   StyledContainer,
   StyledImage,
@@ -15,7 +16,12 @@ import { PlaylistDto } from "../dto/playlist-dto";
 import SearchSong from "./search-song";
 import DeleteDialog from "./delet-dialog";
 import DeleteIcon from "@mui/icons-material/Delete";
+//import FavoriteIcon from "@mui/icons-material/Favorite";
+import ThumbUpIcon from "@mui/icons-material/ThumbUpAlt";
+
 import { SpotifyTrackInfo } from "../constants/spotify";
+import { IconButton } from "@mui/material";
+import VoteButton from "./vote";
 
 function Playlist() {
   const [playlist, setplaylist] = useState<PlaylistDto>();
@@ -83,9 +89,12 @@ function Playlist() {
             <StyledListItem key={song.spotifySongId}>
               <StyledImage src={song.albumCoverUrl} alt={song.name} />
               <StyledCardContent>
-                <StyledTypography variant="subtitle1">
-                  {song.name}
-                </StyledTypography>
+                <div style={{ display: "flex", alignItems: "center" }}>
+                  <VoteButton />
+                  <StyledTypography variant="subtitle1">
+                    {song.name}
+                  </StyledTypography>
+                </div>
                 <DeleteIconButton
                   onClick={() => handleDeleteSong(song.spotifySongId)}
                 >
