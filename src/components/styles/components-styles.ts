@@ -119,14 +119,24 @@ const StyledVoteIconButton = styled(IconButton)<StyledIconButtonProps>(
   ({ theme, hasvote }) => ({
     position: "absolute",
     bottom: theme.spacing(1),
-    color: hasvote == "true" ? "#FFFF00" : "#fff",
+    color: hasvote == "true" ? "#FFD300" : "#fff",
     backgroundColor: theme.palette.primary.dark,
+    transition: "background-color 0.3s, color 0.3s", // Add transition for smooth hover effect
 
     "&:hover": {
       backgroundColor: theme.palette.primary.dark,
     },
+    "& .MuiIconButton-label": {
+      transition: "transform 0.3s", // Add transition for icon animation
+    },
+
+    "&:active": {
+      transform: "scale(0.95)", // Add slight scale effect when button is pressed
+    },
   }),
 );
+
+export default StyledVoteIconButton;
 
 export {
   StyledContainer,
