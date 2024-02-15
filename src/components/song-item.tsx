@@ -10,6 +10,7 @@ import StyledVoteIconButton, {
   StyledTypography,
 } from "./styles/components-styles";
 import DeleteDialog from "./delet-dialog";
+import { ListItem, Typography } from "@mui/material";
 
 interface SongItemProps {
   song: SongDto;
@@ -39,29 +40,24 @@ const SongItem: FC<SongItemProps> = ({ song, playlistId, onDelete }) => {
 
   return (
     <StyledListItem key={song.spotifySongId}>
-      <StyledCardContent>
-        <StyledVoteIconButton
-          hasvote={hasVoted.toString()}
-          onClick={handleVoteClick}
-        >
-          <ThumbUpIcon />
-        </StyledVoteIconButton>
-        <div style={{ marginLeft: "8px" }}>
-          {" "}
-          {/* Adjust margin as needed */}
-          <StyledImage src={song.albumCoverUrl} alt={song.name} />
-          <StyledTypography variant="subtitle1">{song.name}</StyledTypography>
-        </div>
-        <RightIconButton onClick={() => handleDeleteClick()}>
-          <DeleteIcon />
-        </RightIconButton>
-        <DeleteDialog
-          open={isDialogOpen}
-          onClose={handleCancelDelete}
-          onConfirm={handleConfirmDelete}
-          itemToDeleteId={playlistId}
-        />
-      </StyledCardContent>
+      <StyledImage src={song.albumCoverUrl} alt={song.name} />
+      <StyledTypography variant="subtitle1">{song.name}</StyledTypography>
+
+      <StyledVoteIconButton
+        hasvote={hasVoted.toString()}
+        onClick={handleVoteClick}
+      >
+        <ThumbUpIcon />
+      </StyledVoteIconButton>
+      <RightIconButton onClick={() => handleDeleteClick()}>
+        <DeleteIcon />
+      </RightIconButton>
+      <DeleteDialog
+        open={isDialogOpen}
+        onClose={handleCancelDelete}
+        onConfirm={handleConfirmDelete}
+        itemToDeleteId={playlistId}
+      />
     </StyledListItem>
   );
 };

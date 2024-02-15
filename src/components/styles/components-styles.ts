@@ -58,7 +58,9 @@ const StyledListItem = styled(ListItem)(({ theme }) => ({
   minHeight: "10vh",
 
   width: "200px",
+  height: "270px",
   margin: theme.spacing(2),
+  padding: theme.spacing(2),
   textAlign: "center",
   backgroundColor: theme.palette.background.paper,
   boxShadow: theme.shadows[4],
@@ -74,6 +76,7 @@ const StyledImage = styled("img")(({ theme }) => ({
   height: "150px",
   objectFit: "cover",
   borderRadius: "5%",
+  marginBottom: theme.spacing(1),
 }));
 
 const StyledButton = styled(Button)(({ theme }) => ({
@@ -122,6 +125,7 @@ const StyledVoteIconButton = styled(IconButton)<StyledIconButtonProps>(
     color: hasvote == "true" ? "#FFD300" : "#fff",
     backgroundColor: theme.palette.primary.dark,
     transition: "background-color 0.3s, color 0.3s", // Add transition for smooth hover effect
+    left: theme.spacing(1),
 
     "&:hover": {
       backgroundColor: theme.palette.primary.dark,
