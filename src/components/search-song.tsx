@@ -1,12 +1,4 @@
-import axios from "axios";
-import {
-  FC,
-  HTMLAttributes,
-  SyntheticEvent,
-  useContext,
-  useEffect,
-  useState,
-} from "react";
+import { FC, HTMLAttributes, useContext, useEffect, useState } from "react";
 import { UserContext } from "../user-context";
 import {
   StyledButton,

@@ -5,28 +5,31 @@ import {
   StyledCard,
   StyledCardContent,
   StyledContainer,
+  StyledImage,
   StyledTypography,
 } from "./styles/components-styles";
 
 function Login() {
   return (
-    <StyledContainer>
-      <img src={image} style={{ width: "400px", height: "300px" }} alt="logo" />
-      <StyledCard variant="outlined" style={{ marginTop: "20px" }}>
-        <StyledCardContent>
-          <StyledTypography variant="h5">Get Started</StyledTypography>
-          <StyledButton
-            variant="contained"
-            color="primary"
-            fullWidth
-            style={{ marginTop: "20px" }}
-            onClick={spotifyAuthentication}
-          >
-            Log in with Spotify
-          </StyledButton>
-        </StyledCardContent>
-      </StyledCard>
-    </StyledContainer>
+    <StyledCard variant="outlined" style={{ marginTop: "20px" }}>
+      <StyledCardContent>
+        <StyledImage
+          src={image}
+          style={{ width: "400px", height: "300px" }}
+          alt="logo"
+        />
+        <StyledTypography variant="h5">Get Started</StyledTypography>
+        <StyledButton
+          variant="contained"
+          color="primary"
+          fullWidth
+          style={{ marginTop: "20px" }}
+          onClick={spotifyAuthentication}
+        >
+          Log in with Spotify
+        </StyledButton>
+      </StyledCardContent>
+    </StyledCard>
   );
 }
 

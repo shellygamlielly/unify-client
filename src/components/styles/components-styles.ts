@@ -9,7 +9,16 @@ import {
   IconButton,
   Container,
   IconButtonProps,
+  Box,
 } from "@mui/material";
+
+const StyledBox = styled(Box)(({ theme }) => ({
+  background: `linear-gradient(to right, ${theme.palette.primary.main}, ${theme.palette.secondary.main})`,
+  color: theme.palette.primary.contrastText,
+  textAlign: "center",
+  minHeight: "100vh",
+  padding: theme.spacing(4), // Corrected typo: 'adding' to 'padding'
+}));
 
 const StyledContainer = styled(Container)(({ theme }) => ({
   minHeight: "100vh",
@@ -75,7 +84,7 @@ const StyledImage = styled("img")(({ theme }) => ({
   width: "100%",
   height: "150px",
   objectFit: "cover",
-  borderRadius: "5%",
+  borderRadius: "10%",
   marginBottom: theme.spacing(1),
 }));
 
@@ -143,6 +152,7 @@ const StyledVoteIconButton = styled(IconButton)<StyledIconButtonProps>(
 export default StyledVoteIconButton;
 
 export {
+  StyledBox,
   StyledContainer,
   StyledCard,
   StyledTypography,

@@ -18,7 +18,7 @@ import {
   StyledContainer,
 } from "./styles/components-styles";
 import { useNavigate } from "react-router-dom";
-import DeleteDialog from "./delet-dialog";
+import DeleteDialog from "./delete-dialog";
 import InviteDialog from "./invite-colaborators";
 
 function Home() {
