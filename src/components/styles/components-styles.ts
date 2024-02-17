@@ -84,7 +84,7 @@ const StyledImage = styled("img")(({ theme }) => ({
   width: "100%",
   height: "150px",
   objectFit: "cover",
-  borderRadius: "5%",
+  borderRadius: "10%",
   marginBottom: theme.spacing(1),
 }));
 
