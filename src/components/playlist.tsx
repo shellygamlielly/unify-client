@@ -17,6 +17,8 @@ import SongItem from "./song-item";
 
 function Playlist() {
   const [playlist, setplaylist] = useState<PlaylistDto>();
+  const [search, setSearch] = useState<boolean>();
+
   const { playlistId } = useParams();
 
   const fetchData = async () => {
@@ -34,6 +36,9 @@ function Playlist() {
     fetchData();
   }, []);
 
+  const onSearch = async (isSearch: boolean) => {
+    setSearch(isSearch);
+  };
   const addTrack = async (track: SpotifyTrackInfo) => {
     if (!track) {
       return;
@@ -63,8 +68,8 @@ function Playlist() {
       <StyledCardContent>
         <StyledTypography variant="h2">{playlist?.name}</StyledTypography>
 
-        <SearchSong onTrackSelected={addTrack} />
-        <StyledList>
+        <SearchSong onSearch={onSearch} onTrackSelected={addTrack} />
+        <StyledList style={{ filter: search ? "blur(5px)" : "none" }}>
           {playlist?.songs.map((song) => (
             <SongItem
               key={song.spotifySongId}

@@ -1,24 +1,20 @@
 import { FC, HTMLAttributes, useContext, useEffect, useState } from "react";
 import { UserContext } from "../user-context";
 import {
-  StyledButton,
-  StyledCard,
   StyledCardContent,
   StyledImage,
   StyledTypography,
 } from "./styles/components-styles";
-import AddIcon from "@mui/icons-material/Add";
 import { SpotifyTrackInfo } from "../constants/spotify";
-import { Autocomplete, Box, TextField, styled } from "@mui/material";
+import { Autocomplete, Paper, TextField } from "@mui/material";
 import { search } from "../search";
 
 interface SearchSongProps {
   onTrackSelected: (track: SpotifyTrackInfo) => void;
+  onSearch: (serach: boolean) => void;
 }
 
-const SearchSong: FC<SearchSongProps> = ({
-  onTrackSelected: onTrackSelected,
-}) => {
+const SearchSong: FC<SearchSongProps> = ({ onTrackSelected, onSearch }) => {
   const context = useContext(UserContext);
   const accessToken = context.user.spotifyAccessToken;
 
@@ -29,8 +25,11 @@ const SearchSong: FC<SearchSongProps> = ({
   const handleSearch = async (query: string) => {
     if (!query?.trim()) {
       setSuggestions([]);
+      onSearch(false);
       return;
     }
+    onSearch(true);
+
     if (!accessToken) {
       return;
     }
@@ -52,7 +51,18 @@ const SearchSong: FC<SearchSongProps> = ({
     _props: HTMLAttributes<HTMLLIElement>,
     track: SpotifyTrackInfo,
   ) => (
-    <StyledCard key={track.id}>
+    <Paper
+      elevation={3}
+      style={{
+        padding: "20px",
+        display: "flex",
+        flexDirection: "column",
+        alignItems: "center",
+        maxWidth: "300px",
+        cursor: "pointer",
+      }}
+      onClick={() => onTrackSelected(track)} // Attach onClick event handler
+    >
       <StyledImage src={track.album.images[0].url} />
       <StyledTypography variant="subtitle1">{track.name}</StyledTypography>
       <StyledTypography variant="subtitle2">
@@ -61,11 +71,7 @@ const SearchSong: FC<SearchSongProps> = ({
       <StyledTypography variant="subtitle2">
         {track.album.name}
       </StyledTypography>
-      <StyledButton onClick={() => onTrackSelected(track)}>
-        <AddIcon />
-        Add
-      </StyledButton>
-    </StyledCard>
+    </Paper>
   );
 
   return (

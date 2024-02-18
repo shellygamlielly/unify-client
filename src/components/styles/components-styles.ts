@@ -53,7 +53,7 @@ const StyledListItem = styled(ListItem)(({ theme }) => ({
   minHeight: "10vh",
 
   width: "200px",
-  height: "270px",
+  height: "280px",
   margin: theme.spacing(2),
   padding: theme.spacing(2),
   textAlign: "center",

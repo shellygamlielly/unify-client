@@ -10,7 +10,7 @@ import StyledVoteIconButton, {
   StyledTypography,
 } from "./styles/components-styles";
 import DeleteDialog from "./delet-dialog";
-import { ListItem, Typography } from "@mui/material";
+import { ListItem, Tooltip, Typography } from "@mui/material";
 
 interface SongItemProps {
   song: SongDto;
@@ -41,8 +41,21 @@ const SongItem: FC<SongItemProps> = ({ song, playlistId, onDelete }) => {
   return (
     <StyledListItem key={song.spotifySongId}>
       <StyledImage src={song.albumCoverUrl} alt={song.name} />
-      <StyledTypography variant="subtitle1">{song.name}</StyledTypography>
-
+      <Tooltip title={song.name}>
+        <StyledTypography
+          variant="subtitle1"
+          style={{
+            width: "160px",
+            display: "-webkit-box",
+            WebkitBoxOrient: "vertical",
+            WebkitLineClamp: 2, // Limit to 2 lines
+            overflow: "hidden",
+            textOverflow: "ellipsis",
+          }}
+        >
+          {song.name}
+        </StyledTypography>
+      </Tooltip>
       <StyledVoteIconButton
         hasvote={hasVoted.toString()}
         onClick={handleVoteClick}
