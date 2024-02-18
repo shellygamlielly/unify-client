@@ -1,12 +1,4 @@
-import axios from "axios";
-import {
-  FC,
-  HTMLAttributes,
-  SyntheticEvent,
-  useContext,
-  useEffect,
-  useState,
-} from "react";
+import { FC, HTMLAttributes, useContext, useEffect, useState } from "react";
 import { UserContext } from "../user-context";
 import {
   StyledButton,
@@ -17,7 +9,7 @@ import {
 } from "./styles/components-styles";
 import AddIcon from "@mui/icons-material/Add";
 import { SpotifyTrackInfo } from "../constants/spotify";
-import { Autocomplete, TextField } from "@mui/material";
+import { Autocomplete, Box, TextField, styled } from "@mui/material";
 import { search } from "../search";
 
 interface SearchSongProps {
@@ -57,49 +49,44 @@ const SearchSong: FC<SearchSongProps> = ({
   }, [query]);
 
   const renderOption = (
-    props: HTMLAttributes<HTMLLIElement>,
+    _props: HTMLAttributes<HTMLLIElement>,
     track: SpotifyTrackInfo,
   ) => (
     <StyledCard key={track.id}>
-      <StyledCardContent>
-        <StyledImage src={track.album.images[0].url} />
-        <StyledTypography variant="subtitle1">{track.name}</StyledTypography>
-        <StyledTypography variant="subtitle2">
-          {track.artists[0].name}
-        </StyledTypography>
-        <StyledTypography variant="subtitle2">
-          {track.album.name}
-        </StyledTypography>
-        <StyledButton onClick={() => onTrackSelected(track)}>
-          <AddIcon />
-          Add
-        </StyledButton>
-      </StyledCardContent>
+      <StyledImage src={track.album.images[0].url} />
+      <StyledTypography variant="subtitle1">{track.name}</StyledTypography>
+      <StyledTypography variant="subtitle2">
+        {track.artists[0].name}
+      </StyledTypography>
+      <StyledTypography variant="subtitle2">
+        {track.album.name}
+      </StyledTypography>
+      <StyledButton onClick={() => onTrackSelected(track)}>
+        <AddIcon />
+        Add
+      </StyledButton>
     </StyledCard>
   );
 
   return (
-    <StyledCard>
-      <StyledCardContent>
-        <StyledTypography variant="h6">
-          Find your favorite songs
-        </StyledTypography>
-        <Autocomplete
-          id="search-autocomplete"
-          options={suggestions}
-          getOptionLabel={(option) => option.name}
-          renderInput={(params) => (
-            <TextField
-              {...params}
-              label="Search for a song"
-              variant="outlined"
-              onChange={(e) => setQuery(e.target.value)}
-            />
-          )}
-          renderOption={renderOption}
-        />
-      </StyledCardContent>
-    </StyledCard>
+    <StyledCardContent>
+      <StyledTypography variant="h6">Find your favorite songs</StyledTypography>
+      <Autocomplete
+        id="search-autocomplete"
+        options={suggestions}
+        getOptionLabel={(option) => option.name}
+        renderInput={(params) => (
+          <TextField
+            {...params}
+            label="Search for a song"
+            variant="outlined"
+            style={{ width: 250 }}
+            onChange={(e) => setQuery(e.target.value)}
+          />
+        )}
+        renderOption={renderOption}
+      />
+    </StyledCardContent>
   );
 };
 

@@ -1,5 +1,5 @@
 import { SPOTIFY_LOGIN } from "./routes";
-export const siteUrl = "http://localhost:5173";
+export const siteUrl = window.location.origin;
 export const redirectUri = `${siteUrl}/${SPOTIFY_LOGIN}`;
 export const clientId = import.meta.env.VITE_SPOTIFY_CLIENT_ID || "";
 

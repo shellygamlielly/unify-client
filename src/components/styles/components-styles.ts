@@ -22,22 +22,17 @@ const StyledContainer = styled(Container)(({ theme }) => ({
 }));
 
 const StyledCard = styled(Card)(({ theme }) => ({
-  margin: "auto",
   padding: theme.spacing(3),
   textAlign: "center",
   background: `linear-gradient(to right, ${theme.palette.primary.light}, ${theme.palette.secondary.dark})`,
   color: theme.palette.primary.contrastText,
-  boxShadow: theme.shadows[2],
-  display: "flex",
   borderRadius: theme.spacing(5),
 }));
 
 const StyledCardContent = styled(CardContent)(({ theme }) => ({
-  flex: "1",
-  display: "flex",
-  flexDirection: "column",
   justifyContent: "space-between",
   padding: theme.spacing(2),
+  alignContent: "center",
 }));
 
 const StyledTypography = styled(Typography)(({ theme }) => ({
@@ -73,7 +68,8 @@ const StyledListItem = styled(ListItem)(({ theme }) => ({
 
 const StyledImage = styled("img")(({ theme }) => ({
   width: "100%",
-  height: "150px",
+  maxHeight: "500px",
+  maxWidth: "500px",
   objectFit: "cover",
   borderRadius: "5%",
   marginBottom: theme.spacing(1),

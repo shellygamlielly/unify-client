@@ -67,6 +67,7 @@ function Playlist() {
         <StyledList>
           {playlist?.songs.map((song) => (
             <SongItem
+              key={song.spotifySongId}
               song={song}
               playlistId={playlistId === undefined ? "" : playlistId}
               onDelete={onDelete}

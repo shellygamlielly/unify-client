@@ -1,31 +1,26 @@
-import { clientId, redirectUri } from "../constants/spotify";
+import { clientId, redirectUri, siteUrl } from "../constants/spotify";
 import image from "/Chuchu.jpeg";
 import {
   StyledButton,
   StyledCard,
   StyledCardContent,
   StyledContainer,
+  StyledImage,
   StyledTypography,
 } from "./styles/components-styles";
+import sha256 from "crypto-js/sha256";
+import { enc } from "crypto-js";
 
 function Login() {
   return (
     <StyledContainer>
-      <img src={image} style={{ width: "400px", height: "300px" }} alt="logo" />
-      <StyledCard variant="outlined" style={{ marginTop: "20px" }}>
-        <StyledCardContent>
-          <StyledTypography variant="h5">Get Started</StyledTypography>
-          <StyledButton
-            variant="contained"
-            color="primary"
-            fullWidth
-            style={{ marginTop: "20px" }}
-            onClick={spotifyAuthentication}
-          >
-            Log in with Spotify
-          </StyledButton>
-        </StyledCardContent>
-      </StyledCard>
+      <StyledCardContent>
+        <StyledImage src={image} alt="logo" />
+        <StyledTypography variant="h2">Get Started</StyledTypography>
+        <StyledButton onClick={spotifyAuthentication}>
+          Log in with Spotify
+        </StyledButton>
+      </StyledCardContent>
     </StyledContainer>
   );
 }
@@ -59,6 +54,7 @@ const spotifyAuthentication = async () => {
   params.append("client_id", clientId);
   params.append("response_type", "code");
   params.append("redirect_uri", redirectUri);
+  console.log(redirectUri);
   params.append("scope", "user-read-private user-read-email");
   params.append("code_challenge_method", "S256");
   params.append("code_challenge", challenge);
