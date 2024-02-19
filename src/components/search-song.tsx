@@ -6,7 +6,12 @@ import {
   StyledTypography,
 } from "./styles/components-styles";
 import { SpotifyTrackInfo } from "../constants/spotify";
-import { Autocomplete, Paper, TextField } from "@mui/material";
+import {
+  Autocomplete,
+  ClickAwayListener,
+  Paper,
+  TextField,
+} from "@mui/material";
 import { search } from "../search";
 
 interface SearchSongProps {
@@ -73,25 +78,30 @@ const SearchSong: FC<SearchSongProps> = ({ onTrackSelected, onSearch }) => {
       </StyledTypography>
     </Paper>
   );
+  const handleClickAaway = () => onSearch(false);
 
   return (
     <StyledCardContent>
       <StyledTypography variant="h6">Find your favorite songs</StyledTypography>
-      <Autocomplete
-        id="search-autocomplete"
-        options={suggestions}
-        getOptionLabel={(option) => option.name}
-        renderInput={(params) => (
-          <TextField
-            {...params}
-            label="Search for a song"
-            variant="outlined"
-            style={{ width: 250 }}
-            onChange={(e) => setQuery(e.target.value)}
-          />
-        )}
-        renderOption={renderOption}
-      />
+      <ClickAwayListener onClickAway={handleClickAaway}>
+        <Autocomplete
+          id="search-autocomplete"
+          options={suggestions}
+          getOptionLabel={(option) => option.name}
+          renderInput={(params) => (
+            <TextField
+              {...params}
+              label="Search for a song"
+              style={{ width: 400 }}
+              onChange={(e) => setQuery(e.target.value)}
+              sx={{
+                "& .MuiAutocomplete-inputRoot": { backgroundColor: "white" },
+              }}
+            />
+          )}
+          renderOption={renderOption}
+        />
+      </ClickAwayListener>
     </StyledCardContent>
   );
 };

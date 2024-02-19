@@ -46,19 +46,20 @@ function Welcome() {
         <Typography variant="h5">
           Welcome, {userContext?.user?.displayName}!
         </Typography>
+
+        <Button
+          variant="contained"
+          color="primary"
+          size="large"
+          style={{
+            backgroundColor: "##add8e6", // Vibrant color
+            color: "#fff", // Text color
+          }}
+          onClick={() => createUser()}
+        >
+          Sign Up
+        </Button>
       </Paper>
-      <Button
-        variant="contained"
-        color="primary"
-        size="large"
-        style={{
-          backgroundColor: "##add8e6", // Vibrant color
-          color: "#fff", // Text color
-        }}
-        onClick={() => createUser()}
-      >
-        Sign Up
-      </Button>
     </>
   );
 }
