@@ -1,15 +1,12 @@
-import { clientId, redirectUri, siteUrl } from "../constants/spotify";
+import { clientId, redirectUri } from "../constants/spotify";
 import image from "/Chuchu.jpeg";
 import {
   StyledButton,
-  StyledCard,
   StyledCardContent,
   StyledContainer,
   StyledImage,
   StyledTypography,
 } from "./styles/components-styles";
-import sha256 from "crypto-js/sha256";
-import { enc } from "crypto-js";
 
 function Login() {
   return (

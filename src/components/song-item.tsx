@@ -4,13 +4,12 @@ import { FC, useState } from "react";
 import { SongDto } from "../dto/song-dto";
 import StyledVoteIconButton, {
   RightIconButton,
-  StyledCardContent,
   StyledImage,
   StyledListItem,
   StyledTypography,
 } from "./styles/components-styles";
 import DeleteDialog from "./delet-dialog";
-import { ListItem, Tooltip, Typography } from "@mui/material";
+import { Tooltip } from "@mui/material";
 
 interface SongItemProps {
   song: SongDto;
