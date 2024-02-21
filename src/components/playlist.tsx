@@ -17,7 +17,7 @@ import SongItem from "./song-item";
 
 function Playlist() {
   const [playlist, setplaylist] = useState<PlaylistDto>();
-  const [search, setSearch] = useState<boolean>();
+  const [search, setSearch] = useState<boolean>(false);
 
   const { playlistId } = useParams();
 
@@ -81,6 +81,7 @@ function Playlist() {
               song={song}
               playlistId={playlistId === undefined ? "" : playlistId}
               onDelete={onDelete}
+              disabled={search}
             ></SongItem>
           ))}
         </StyledList>

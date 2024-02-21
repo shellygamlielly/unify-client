@@ -15,8 +15,14 @@ interface SongItemProps {
   song: SongDto;
   playlistId: string;
   onDelete: (playlistId: string, spotifyId: string) => void;
+  disabled: boolean;
 }
-const SongItem: FC<SongItemProps> = ({ song, playlistId, onDelete }) => {
+const SongItem: FC<SongItemProps> = ({
+  song,
+  playlistId,
+  onDelete,
+  disabled,
+}) => {
   const [isDialogOpen, setDialogOpen] = useState(false);
   const [hasVoted, setHasVoted] = useState(false);
 
@@ -58,10 +64,11 @@ const SongItem: FC<SongItemProps> = ({ song, playlistId, onDelete }) => {
       <StyledVoteIconButton
         hasvote={hasVoted.toString()}
         onClick={handleVoteClick}
+        disabled={disabled}
       >
         <ThumbUpIcon />
       </StyledVoteIconButton>
-      <RightIconButton onClick={() => handleDeleteClick()}>
+      <RightIconButton onClick={() => handleDeleteClick()} disabled={disabled}>
         <DeleteIcon />
       </RightIconButton>
       <DeleteDialog

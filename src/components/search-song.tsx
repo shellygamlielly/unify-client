@@ -78,6 +78,7 @@ const SearchSong: FC<SearchSongProps> = ({ addTrack, onSearch }) => {
       onSearch(true);
     } else {
       onSearch(false);
+      setSuggestions([]);
     }
     setSongSelected(null); // Reset songSelected state
   };
@@ -133,7 +134,10 @@ const SearchSong: FC<SearchSongProps> = ({ addTrack, onSearch }) => {
               label="Search for a song"
               onChange={(e) => setQuery(e.target.value)}
               sx={{
-                "& .MuiAutocomplete-inputRoot": { backgroundColor: "white" },
+                "& .MuiAutocomplete-inputRoot": {
+                  backgroundColor: "white",
+                  color: "black",
+                },
                 width: 400,
               }}
             />
