@@ -123,12 +123,12 @@ const SearchSong: FC<SearchSongProps> = ({ addTrack, onSearch }) => {
   return (
     <div>
       <StyledTypography variant="h6">Find your favorite songs</StyledTypography>
-      <ClickAwayListener onClickAway={handleClickAway}>
-        <Autocomplete
-          id="search-autocomplete"
-          options={suggestions}
-          getOptionLabel={(option) => option.name}
-          renderInput={(params) => (
+      <Autocomplete
+        id="search-autocomplete"
+        options={suggestions}
+        getOptionLabel={(option) => option.name}
+        renderInput={(params) => (
+          <ClickAwayListener onClickAway={handleClickAway}>
             <TextField
               {...params}
               label="Search for a song"
@@ -141,10 +141,10 @@ const SearchSong: FC<SearchSongProps> = ({ addTrack, onSearch }) => {
                 width: 400,
               }}
             />
-          )}
-          renderOption={renderOption}
-        />
-      </ClickAwayListener>
+          </ClickAwayListener>
+        )}
+        renderOption={renderOption}
+      />
     </div>
   );
 };
