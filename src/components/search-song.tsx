@@ -96,7 +96,7 @@ const SearchSong: FC<SearchSongProps> = ({ addTrack, onSearch }) => {
     >
       <StyledImage
         src={track.album.images[0].url}
-        style={{ width: "60px", marginRight: "10px" }}
+        style={{ maxWidth: "60px", marginRight: "10px" }}
       />
       <div style={{ flex: 1 }}>
         <StyledTypography variant="subtitle1">{track.name}</StyledTypography>
@@ -120,16 +120,10 @@ const SearchSong: FC<SearchSongProps> = ({ addTrack, onSearch }) => {
   );
 
   return (
-    <StyledCardContent>
+    <div>
       <StyledTypography variant="h6">Find your favorite songs</StyledTypography>
       <ClickAwayListener onClickAway={handleClickAway}>
         <Autocomplete
-          style={{
-            width: 400,
-            marginLeft: 400,
-            marginTop: 20,
-            marginBottom: 10,
-          }}
           id="search-autocomplete"
           options={suggestions}
           getOptionLabel={(option) => option.name}
@@ -140,13 +134,14 @@ const SearchSong: FC<SearchSongProps> = ({ addTrack, onSearch }) => {
               onChange={(e) => setQuery(e.target.value)}
               sx={{
                 "& .MuiAutocomplete-inputRoot": { backgroundColor: "white" },
+                width: 400,
               }}
             />
           )}
           renderOption={renderOption}
         />
       </ClickAwayListener>
-    </StyledCardContent>
+    </div>
   );
 };
 
