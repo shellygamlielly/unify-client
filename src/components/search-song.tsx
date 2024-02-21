@@ -8,24 +8,28 @@ import {
 import { SpotifyTrackInfo } from "../constants/spotify";
 import {
   Autocomplete,
+  Button,
   ClickAwayListener,
   Paper,
   TextField,
 } from "@mui/material";
 import { search } from "../search";
+import AddIcon from "@mui/icons-material/Add";
 
 interface SearchSongProps {
-  onTrackSelected: (track: SpotifyTrackInfo) => void;
+  addTrack: (track: SpotifyTrackInfo) => Promise<boolean>;
   onSearch: (serach: boolean) => void;
 }
 
-const SearchSong: FC<SearchSongProps> = ({ onTrackSelected, onSearch }) => {
+const SearchSong: FC<SearchSongProps> = ({ addTrack, onSearch }) => {
   const context = useContext(UserContext);
   const accessToken = context.user.spotifyAccessToken;
 
   const [query, setQuery] = useState("");
   const [suggestions, setSuggestions] = useState<SpotifyTrackInfo[]>([]);
-  const [songSelected, setSongSelected] = useState(false);
+  const [songSelected, setSongSelected] = useState<SpotifyTrackInfo | null>(
+    null,
+  );
 
   const handleSearch = async (query: string) => {
     if (!query?.trim()) {
@@ -51,13 +55,31 @@ const SearchSong: FC<SearchSongProps> = ({ onTrackSelected, onSearch }) => {
   useEffect(() => {
     handleSearch(query);
   }, [query]);
+
+  useEffect(() => {
+    const addSongToPlaylist = async () => {
+      if (songSelected) {
+        if (await addTrack(songSelected)) {
+          // Filter out the selected track from suggestions
+          setSuggestions((prevSuggestions) =>
+            prevSuggestions.filter(
+              (suggestion) => suggestion.id !== songSelected.id,
+            ),
+          );
+        }
+      }
+    };
+
+    addSongToPlaylist();
+  }, [songSelected]);
+
   const handleClickAway = () => {
     if (songSelected) {
       onSearch(true);
     } else {
       onSearch(false);
     }
-    setSongSelected(false); // Reset songSelected state
+    setSongSelected(null); // Reset songSelected state
   };
   const renderOption = (
     _props: HTMLAttributes<HTMLLIElement>,
@@ -68,24 +90,32 @@ const SearchSong: FC<SearchSongProps> = ({ onTrackSelected, onSearch }) => {
       style={{
         padding: "20px",
         display: "flex",
-        flexDirection: "column",
+        flexDirection: "row",
         alignItems: "center",
-        maxWidth: "300px",
-        cursor: "pointer",
-      }}
-      onClick={() => {
-        onTrackSelected(track);
-        setSongSelected(true);
       }}
     >
-      <StyledImage src={track.album.images[0].url} />
-      <StyledTypography variant="subtitle1">{track.name}</StyledTypography>
-      <StyledTypography variant="subtitle2">
-        {track.artists[0].name}
-      </StyledTypography>
-      <StyledTypography variant="subtitle2">
-        {track.album.name}
-      </StyledTypography>
+      <StyledImage
+        src={track.album.images[0].url}
+        style={{ width: "60px", marginRight: "10px" }}
+      />
+      <div style={{ flex: 1 }}>
+        <StyledTypography variant="subtitle1">{track.name}</StyledTypography>
+        <StyledTypography variant="subtitle2">
+          {track.artists[0].name}
+        </StyledTypography>
+        <StyledTypography variant="subtitle2">
+          {track.album.name}
+        </StyledTypography>
+      </div>
+      <Button
+        onClick={() => {
+          setSongSelected(track);
+        }}
+        variant="contained"
+        color="primary"
+      >
+        <AddIcon />
+      </Button>
     </Paper>
   );
 
@@ -94,7 +124,12 @@ const SearchSong: FC<SearchSongProps> = ({ onTrackSelected, onSearch }) => {
       <StyledTypography variant="h6">Find your favorite songs</StyledTypography>
       <ClickAwayListener onClickAway={handleClickAway}>
         <Autocomplete
-          style={{ width: 450 }}
+          style={{
+            width: 400,
+            marginLeft: 400,
+            marginTop: 20,
+            marginBottom: 10,
+          }}
           id="search-autocomplete"
           options={suggestions}
           getOptionLabel={(option) => option.name}

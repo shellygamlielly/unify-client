@@ -41,7 +41,10 @@ function Playlist() {
   };
   const addTrack = async (track: SpotifyTrackInfo) => {
     if (!track) {
-      return;
+      return false;
+    }
+    if (playlist?.songs.find((song) => song.spotifySongId == track.id)) {
+      return false;
     }
     await axios.post(`${import.meta.env.VITE_TUNITY_SERVER_BASE_URL}/song/`, {
       spotifySongId: track.id,
@@ -49,7 +52,9 @@ function Playlist() {
       playlistId: playlistId,
       albumCoverUrl: track.album.images[0].url,
     });
+    //return false if track already exist
     fetchData();
+    return true;
   };
 
   const onDelete = async (playlistId: string, spotifySongId: string) => {
@@ -68,7 +73,7 @@ function Playlist() {
       <StyledCardContent>
         <StyledTypography variant="h2">{playlist?.name}</StyledTypography>
 
-        <SearchSong onSearch={onSearch} onTrackSelected={addTrack} />
+        <SearchSong onSearch={onSearch} addTrack={addTrack} />
         <StyledList style={{ filter: search ? "blur(5px)" : "none" }}>
           {playlist?.songs.map((song) => (
             <SongItem
