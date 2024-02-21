@@ -24,8 +24,8 @@ const SearchSong: FC<SearchSongProps> = ({ onTrackSelected, onSearch }) => {
   const accessToken = context.user.spotifyAccessToken;
 
   const [query, setQuery] = useState("");
-  console.log(query);
   const [suggestions, setSuggestions] = useState<SpotifyTrackInfo[]>([]);
+  const [songSelected, setSongSelected] = useState(false);
 
   const handleSearch = async (query: string) => {
     if (!query?.trim()) {
@@ -51,7 +51,14 @@ const SearchSong: FC<SearchSongProps> = ({ onTrackSelected, onSearch }) => {
   useEffect(() => {
     handleSearch(query);
   }, [query]);
-
+  const handleClickAway = () => {
+    if (songSelected) {
+      onSearch(true);
+    } else {
+      onSearch(false);
+    }
+    setSongSelected(false); // Reset songSelected state
+  };
   const renderOption = (
     _props: HTMLAttributes<HTMLLIElement>,
     track: SpotifyTrackInfo,
@@ -66,7 +73,10 @@ const SearchSong: FC<SearchSongProps> = ({ onTrackSelected, onSearch }) => {
         maxWidth: "300px",
         cursor: "pointer",
       }}
-      onClick={() => onTrackSelected(track)} // Attach onClick event handler
+      onClick={() => {
+        onTrackSelected(track);
+        setSongSelected(true);
+      }}
     >
       <StyledImage src={track.album.images[0].url} />
       <StyledTypography variant="subtitle1">{track.name}</StyledTypography>
@@ -78,13 +88,13 @@ const SearchSong: FC<SearchSongProps> = ({ onTrackSelected, onSearch }) => {
       </StyledTypography>
     </Paper>
   );
-  const handleClickAaway = () => onSearch(false);
 
   return (
     <StyledCardContent>
       <StyledTypography variant="h6">Find your favorite songs</StyledTypography>
-      <ClickAwayListener onClickAway={handleClickAaway}>
+      <ClickAwayListener onClickAway={handleClickAway}>
         <Autocomplete
+          style={{ width: 450 }}
           id="search-autocomplete"
           options={suggestions}
           getOptionLabel={(option) => option.name}
@@ -92,7 +102,6 @@ const SearchSong: FC<SearchSongProps> = ({ onTrackSelected, onSearch }) => {
             <TextField
               {...params}
               label="Search for a song"
-              style={{ width: 400 }}
               onChange={(e) => setQuery(e.target.value)}
               sx={{
                 "& .MuiAutocomplete-inputRoot": { backgroundColor: "white" },
