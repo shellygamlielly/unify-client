@@ -1,8 +1,7 @@
 import { Avatar, Button, Paper, Typography } from "@mui/material";
-import axios from "axios";
 import { useNavigate } from "react-router-dom";
 import { useUser } from "../user-context";
-import { UserDto } from "../dto/user-dto";
+import { addUser } from "../api/server";
 
 function Welcome() {
   const userContext = useUser();
@@ -10,16 +9,10 @@ function Welcome() {
 
   const createUser = async () => {
     try {
-      const response = await axios.post(
-        `${import.meta.env.VITE_TUNITY_SERVER_BASE_URL}/user/`,
-        {
-          spotifyId: userContext.user.spotifyId,
-          email: userContext.user.email,
-        },
+      const user = await addUser(
+        userContext.user.spotifyId,
+        userContext.user.email,
       );
-
-      const user = response.data as UserDto;
-
       userContext.setUserId(user.userId);
       navigate("/home");
     } catch (error) {
