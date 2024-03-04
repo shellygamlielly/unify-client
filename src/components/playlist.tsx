@@ -14,6 +14,7 @@ import SearchSong from "./search-song";
 
 import { SpotifyTrackInfo } from "../constants/spotify";
 import SongItem from "./song-item";
+import { addSong, fetchPlaylist, removeSong } from "../api/server";
 
 function Playlist() {
   const [playlist, setplaylist] = useState<PlaylistDto>();
@@ -21,19 +22,17 @@ function Playlist() {
 
   const { playlistId } = useParams();
 
-  const fetchData = async () => {
+  const fetchSongs = async () => {
     try {
-      const result = await axios.get(
-        `${import.meta.env.VITE_TUNITY_SERVER_BASE_URL}/playlist/${playlistId}`,
-      );
-      setplaylist(result.data);
+      const playlist = await fetchPlaylist(playlistId);
+      setplaylist(playlist);
     } catch (error) {
       console.error("Error fetching playlists:", error);
     }
   };
 
   useEffect(() => {
-    fetchData();
+    fetchSongs();
   }, []);
 
   const onSearch = async (isSearch: boolean) => {
@@ -46,23 +45,15 @@ function Playlist() {
     if (playlist?.songs.find((song) => song.spotifySongId == track.id)) {
       return false;
     }
-    await axios.post(`${import.meta.env.VITE_TUNITY_SERVER_BASE_URL}/song/`, {
-      spotifySongId: track.id,
-      name: track.name,
-      playlistId: playlistId,
-      albumCoverUrl: track.album.images[0].url,
-    });
-    //return false if track already exist
-    fetchData();
+    await addSong(track, playlistId);
+    fetchSongs();
     return true;
   };
 
   const onDelete = async (playlistId: string, spotifySongId: string) => {
     try {
-      await axios.delete(
-        `${import.meta.env.VITE_TUNITY_SERVER_BASE_URL}/song/${playlistId}/${spotifySongId}`,
-      );
-      await fetchData();
+      await removeSong(playlistId, spotifySongId);
+      await fetchSongs();
     } catch (e) {
       console.error("Error removing playlist:", e);
     }

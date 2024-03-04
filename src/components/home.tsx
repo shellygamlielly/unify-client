@@ -20,6 +20,7 @@ import {
 import { useNavigate } from "react-router-dom";
 import DeleteDialog from "./delet-dialog";
 import InviteDialog from "./invite-colaborators";
+import { createPlaylist, fetchPlaylists, removePlaylist } from "../api/server";
 
 function Home() {
   const [playlists, setPlaylists] = useState<CreatePlaylistDto[]>([]);
@@ -33,12 +34,10 @@ function Home() {
   const context = useContext(UserContext);
   const navigate = useNavigate();
 
-  const fetchPlaylists = async () => {
+  const fetchData = async () => {
     try {
-      const playlistsData = await axios.get(
-        `${import.meta.env.VITE_TUNITY_SERVER_BASE_URL}/playlist/ownerId/${context.user.userId}`,
-      );
-      setPlaylists(playlistsData.data);
+      const playlistsData = await fetchPlaylists(context.user.userId);
+      setPlaylists(playlistsData);
     } catch (error) {
       console.error("Error fetching playlists:", error);
     }
@@ -46,25 +45,23 @@ function Home() {
   useEffect(() => {
     // Fetch playlists only if ownerId is available
     if (context.user.userId) {
-      fetchPlaylists();
+      fetchData();
     }
   }, [context.user.userId]);
 
   const handleCreatePlaylist = async () => {
     const playlistName = prompt("Enter playlist name:");
     if (playlistName && context.user.userId) {
-      await createPlaylist(playlistName, context.user.userId);
+      await handlePlaylistCreation(playlistName, context.user.userId);
     }
   };
 
   const handleConfirmDelete = async () => {
     try {
-      await axios.delete(
-        `${import.meta.env.VITE_TUNITY_SERVER_BASE_URL}/playlist/${selectedPlaylistId}`,
-      );
+      await removePlaylist(selectedPlaylistId);
       console.log("Playlist deleted:", selectedPlaylistId);
       setDeleteDialogOpen(false);
-      await fetchPlaylists();
+      await fetchData();
     } catch (e) {
       console.error("Error removing playlist:", e);
     }
@@ -88,18 +85,12 @@ function Home() {
     navigate(`/playlist/${playlistId}`);
   };
 
-  async function createPlaylist(name: string, ownerId: string) {
+  async function handlePlaylistCreation(name: string, ownerId: string) {
     try {
-      const playlistId = await axios.post(
-        `${import.meta.env.VITE_TUNITY_SERVER_BASE_URL}/playlist/`,
-        {
-          ownerId,
-          name,
-        },
-      );
+      const playlistId = await createPlaylist(name, ownerId);
       console.log("Playlist created:", playlistId);
 
-      await fetchPlaylists();
+      await fetchData();
     } catch (e) {
       console.error("Error creating playlist:", e);
     }

@@ -1,10 +1,6 @@
 import { FC, HTMLAttributes, useContext, useEffect, useState } from "react";
 import { UserContext } from "../user-context";
-import {
-  StyledCardContent,
-  StyledImage,
-  StyledTypography,
-} from "./styles/components-styles";
+import { StyledImage, StyledTypography } from "./styles/components-styles";
 import { SpotifyTrackInfo } from "../constants/spotify";
 import {
   Autocomplete,
@@ -13,8 +9,8 @@ import {
   Paper,
   TextField,
 } from "@mui/material";
-import { search } from "../search";
 import AddIcon from "@mui/icons-material/Add";
+import { searchSpotifyTrack } from "../api/spotify";
 
 interface SearchSongProps {
   addTrack: (track: SpotifyTrackInfo) => Promise<boolean>;
@@ -42,7 +38,7 @@ const SearchSong: FC<SearchSongProps> = ({ addTrack, onSearch }) => {
     if (!accessToken) {
       return;
     }
-    const results = await search(query, accessToken);
+    const results = await searchSpotifyTrack(query, accessToken);
 
     try {
       setSuggestions(results);

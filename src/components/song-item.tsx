@@ -46,7 +46,7 @@ const SongItem: FC<SongItemProps> = ({
   return (
     <StyledListItem key={song.spotifySongId}>
       <StyledImage src={song.albumCoverUrl} alt={song.name} />
-      <Tooltip title={song.name}>
+      <Tooltip title={song.name} disableHoverListener={disabled}>
         <StyledTypography
           variant="subtitle1"
           style={{
