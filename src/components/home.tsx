@@ -34,7 +34,7 @@ function Home() {
   const context = useContext(UserContext);
   const navigate = useNavigate();
 
-  const handlePlaylists = async () => {
+  const fetchData = async () => {
     try {
       const playlistsData = await fetchPlaylists(context.user.userId);
       setPlaylists(playlistsData);
@@ -45,7 +45,7 @@ function Home() {
   useEffect(() => {
     // Fetch playlists only if ownerId is available
     if (context.user.userId) {
-      handlePlaylists();
+      fetchData();
     }
   }, [context.user.userId]);
 
@@ -61,7 +61,7 @@ function Home() {
       await removePlaylist(selectedPlaylistId);
       console.log("Playlist deleted:", selectedPlaylistId);
       setDeleteDialogOpen(false);
-      await handlePlaylists();
+      await fetchData();
     } catch (e) {
       console.error("Error removing playlist:", e);
     }
@@ -90,7 +90,7 @@ function Home() {
       const playlistId = await createPlaylist(name, ownerId);
       console.log("Playlist created:", playlistId);
 
-      await handlePlaylists();
+      await fetchData();
     } catch (e) {
       console.error("Error creating playlist:", e);
     }
